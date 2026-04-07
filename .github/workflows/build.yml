@@ -12,31 +12,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Get SDK
+      - name: Get and Extract SDK
         run: |
           wget -q https://downloads.openwrt.org/releases/23.05.5/targets/ramips/mt7621/openwrt-sdk-23.05.5-ramips-mt7621_gcc-12.3.0_musl.Linux-x86_64.tar.xz
-
-      - name: Extract SDK
-        run: tar xf openwrt-sdk-*.tar.xz
+          tar xf openwrt-sdk-*.tar.xz
+          SDK_DIR=$(ls -d openwrt-sdk-*/)
+          echo "SDK_DIR=$SDK_DIR" >> $GITHUB_ENV
+          echo "SDK extracted to: $SDK_DIR"
 
       - name: Setup package
         run: |
-          mkdir -p openwrt-sdk-*/package/luci-app-ssh-guard/files
-          cp Makefile openwrt-sdk-*/package/luci-app-ssh-guard/
-          cp -r files/* openwrt-sdk-*/package/luci-app-ssh-guard/files/
-          cp -r luasrc openwrt-sdk-*/package/luci-app-ssh-guard/
-          cp -r root/* openwrt-sdk-*/package/luci-app-ssh-guard/
+          mkdir -p "${{ env.SDK_DIR }}package/luci-app-ssh-guard/files"
+          cp Makefile "${{ env.SDK_DIR }}package/luci-app-ssh-guard/"
+          cp -r files/* "${{ env.SDK_DIR }}package/luci-app-ssh-guard/files/"
+          cp -r luasrc "${{ env.SDK_DIR }}package/luci-app-ssh-guard/"
+          cp -r root/* "${{ env.SDK_DIR }}package/luci-app-ssh-guard/"
 
       - name: Build
         run: |
-          cd openwrt-sdk-*
+          cd "${{ env.SDK_DIR }}"
           make package/luci-app-ssh-guard/compile V=sc
-          cd ..
 
       - name: Find IPK
         id: find
         run: |
-          IPK=$(find openwrt-sdk-*/bin -name "luci-app-ssh-guard_*.ipk" | head -1)
+          IPK=$(find "${{ env.SDK_DIR }}bin" -name "luci-app-ssh-guard_*.ipk" | head -1)
           echo "IPK=$IPK" >> $GITHUB_OUTPUT
           echo "Found: $IPK"
 
