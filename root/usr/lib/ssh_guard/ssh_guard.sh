@@ -2,7 +2,7 @@
 
 LOG_FILE="/tmp/ssh_guard.log"
 STATE_DIR="/tmp/ssh_guard"
-BLACKLIST_FILE="/tmp/ssh_guard/blacklist"
+BLACKLIST_FILE="$STATE_DIR/blacklist"
 WHITELIST_FILE="$STATE_DIR/whitelist"
 LOCK_FILE="$STATE_DIR/lock"
 LAST_LINE_FILE="$STATE_DIR/last_line"

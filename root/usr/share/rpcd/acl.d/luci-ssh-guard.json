@@ -1,14 +1,14 @@
 {
-	"ssh_guard": {
-		"description": "Grant access to ssh_guard configuration",
+	"sshfirewall": {
+		"description": "Grant access to sshfirewall configuration",
 		"read": {
-			"uci": [ "ssh_guard" ],
+			"uci": [ "sshfirewall" ],
 			"ubus": {
 				"file": [ "list", "read", "stat" ]
 			}
 		},
 		"write": {
-			"uci": [ "ssh_guard" ],
+			"uci": [ "sshfirewall" ],
 			"ubus": {
 				"file": [ "write", "exec" ]
 			}

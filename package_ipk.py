@@ -8,7 +8,7 @@ import tarfile
 import shutil
 import tempfile
 
-PKG_NAME = "luci-app-ssh-guard"
+PKG_NAME = "luci-app-ssh_guard"
 PKG_VERSION = "1.0.0-1"
 PKG_ARCH = "all"
 
@@ -27,7 +27,6 @@ def create_tar_gz(source_dir, output_file):
                 tar.add(filepath, arcname=arcname)
 
 def build_ar_header(name, size):
-    # ar header: name(16) + mtime(12) + uid(6) + gid(6) + mode(8) + size(10) + magic(2)
     name_bytes = name.encode('ascii')[:15] + b' ' * max(0, 16 - len(name) - 1) + b' '
     mtime = b'0           '
     uid = b'0     '
@@ -48,7 +47,6 @@ def create_ipk():
     os.makedirs(pkg_root)
     os.makedirs(pkg_ctrl)
 
-    # 复制文件
     for src, dst in [
         ("root", pkg_root),
         ("files", os.path.join(pkg_root, "etc/config")),
@@ -70,19 +68,17 @@ def create_ipk():
 
     clean_dir(tmpdir)
 
-    # 设置权限
     for f in ["etc/init.d/ssh_guard", "usr/lib/ssh_guard/ssh_guard.sh"]:
         fp = os.path.join(pkg_root, f)
         if os.path.exists(fp):
             os.chmod(fp, 0o755)
 
-    # 生成 control 文件
     with open(os.path.join(pkg_ctrl, "control"), 'w') as f:
         f.write(f"""Package: {PKG_NAME}
 Version: {PKG_VERSION}
 Depends: libc, iptables, logread
 Source: local
-SourceName: luci-app-ssh-guard
+SourceName: luci-app-ssh_guard
 Section: luci
 Priority: optional
 Maintainer: OpenWrt
@@ -99,37 +95,31 @@ Description: SSH Guard - Auto-ban SSH attackers
 
     ipk_file = f"{PKG_NAME}_{PKG_VERSION}_{PKG_ARCH}.ipk"
 
-    # 创建 tar.gz
     data_tar = os.path.join(tmpdir, "data.tar.gz")
     control_tar = os.path.join(tmpdir, "control.tar.gz")
     
     create_tar_gz(pkg_root, data_tar)
     create_tar_gz(pkg_ctrl, control_tar)
 
-    # 读取 tar.gz 数据
     with open(control_tar, 'rb') as f:
         control_data = f.read()
     with open(data_tar, 'rb') as f:
         data_gz_data = f.read()
     debian_binary = b"2.0\n"
 
-    # 构建 ar 文件
     with open(ipk_file, 'wb') as out:
         out.write(b"!<arch>\n")
         
-        # debian-binary
         out.write(build_ar_header("debian-binary/", len(debian_binary)))
         out.write(debian_binary)
         if len(debian_binary) % 2:
             out.write(b'\n')
         
-        # control.tar.gz
         out.write(build_ar_header("control.tar.gz/", len(control_data)))
         out.write(control_data)
         if len(control_data) % 2:
             out.write(b'\n')
         
-        # data.tar.gz
         out.write(build_ar_header("data.tar.gz/", len(data_gz_data)))
         out.write(data_gz_data)
         if len(data_gz_data) % 2:

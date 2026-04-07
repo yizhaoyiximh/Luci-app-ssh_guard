@@ -1,6 +1,0 @@
-config ssh_guard 'config'
-	option enabled '0'
-	option time_window '10'
-	option max_attempts '3'
-	option ban_duration '3600'
-	option ssh_port '22'

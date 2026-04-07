@@ -6,7 +6,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=luci-app-ssh-guard
+PKG_NAME:=luci-app-ssh_guard
 PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
@@ -15,7 +15,7 @@ PKG_MAINTAINER:=OpenWrt
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/luci-app-ssh-guard
+define Package/luci-app-ssh_guard
   SECTION:=luci
   CATEGORY:=LuCI
   SUBMENU:=3. Applications
@@ -24,7 +24,7 @@ define Package/luci-app-ssh-guard
   DEPENDS:=+iptables +logread
 endef
 
-define Package/luci-app-ssh-guard/description
+define Package/luci-app-ssh_guard/description
   A LuCI application that monitors SSH authentication failures and automatically bans IPs
   that exceed a configurable threshold within a specified time window.
   Default: 10 seconds window, 3 max attempts.
@@ -36,11 +36,11 @@ endef
 define Build/Compile
 endef
 
-define Package/luci-app-ssh-guard/conffiles
+define Package/luci-app-ssh_guard/conffiles
 /etc/config/ssh_guard
 endef
 
-define Package/luci-app-ssh-guard/install
+define Package/luci-app-ssh_guard/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_CONF) ./files/ssh_guard $(1)/etc/config/ssh_guard
 
@@ -67,4 +67,4 @@ define Package/luci-app-ssh-guard/install
 	$(INSTALL_DATA) ./luasrc/view/ssh_guard/actions.htm $(1)/usr/lib/lua/luci/view/ssh_guard/actions.htm
 endef
 
-$(eval $(call BuildPackage,luci-app-ssh-guard))
+$(eval $(call BuildPackage,luci-app-ssh_guard))
