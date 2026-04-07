@@ -12,9 +12,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Get and Extract SDK
+      - name: Download SDK
         run: |
           wget -q https://downloads.openwrt.org/releases/23.05.5/targets/ramips/mt7621/openwrt-sdk-23.05.5-ramips-mt7621_gcc-12.3.0_musl.Linux-x86_64.tar.xz
+          ls -lh openwrt-sdk-*.tar.xz
+
+      - name: Verify SDK
+        run: |
+          if [ ! -f openwrt-sdk-*.tar.xz ]; then
+            echo "ERROR: SDK download failed"
+            exit 1
+          fi
+          if [ $(stat -c%s openwrt-sdk-*.tar.xz) -lt 1000000 ]; then
+            echo "ERROR: SDK file too small, download may be corrupted"
+            exit 1
+          fi
+          echo "SDK download verified"
+
+      - name: Extract SDK
+        run: |
           tar xf openwrt-sdk-*.tar.xz
           SDK_DIR=$(ls -d openwrt-sdk-*/)
           echo "SDK_DIR=$SDK_DIR" >> $GITHUB_ENV
