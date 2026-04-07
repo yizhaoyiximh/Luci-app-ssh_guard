@@ -1,0 +1,47 @@
+name: Build IPK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get SDK
+        run: |
+          wget -q https://downloads.openwrt.org/releases/23.05.5/targets/ramips/mt7621/openwrt-sdk-23.05.5-ramips-mt7621_gcc-12.3.0_musl.Linux-x86_64.tar.xz
+
+      - name: Extract SDK
+        run: tar xf openwrt-sdk-*.tar.xz
+
+      - name: Copy package
+        run: |
+          cp Makefile openwrt-sdk-*/package/luci-app-ssh-guard/
+          mkdir -p openwrt-sdk-*/package/luci-app-ssh-guard/files
+          cp -r files/* openwrt-sdk-*/package/luci-app-ssh-guard/files/
+          cp -r luasrc openwrt-sdk-*/package/luci-app-ssh-guard/
+          cp -r root/* openwrt-sdk-*/package/luci-app-ssh-guard/
+
+      - name: Build
+        run: |
+          cd openwrt-sdk-*
+          make package/luci-app-ssh-guard/compile V=sc
+          cd ..
+
+      - name: Find IPK
+        id: find
+        run: |
+          IPK=$(find openwrt-sdk-*/bin -name "luci-app-ssh-guard_*.ipk" | head -1)
+          echo "IPK=$IPK" >> $GITHUB_OUTPUT
+          echo "Found: $IPK"
+
+      - name: Upload IPK
+        uses: actions/upload-artifact@v4
+        with:
+          name: luci-app-ssh-guard
+          path: ${{ steps.find.outputs.IPK }}

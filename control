@@ -1,0 +1,12 @@
+Package: luci-app-ssh-guard
+Version: 1.0.0-1
+Depends: libc, iptables, logread
+Source: local
+SourceName: luci-app-ssh-guard
+Section: luci
+Priority: optional
+Maintainer: OpenWrt
+Architecture: all
+Installed-Size: 10240
+Description: SSH Guard - Auto-ban SSH attackers
+ A LuCI plugin to monitor SSH authentication failures and ban IPs.

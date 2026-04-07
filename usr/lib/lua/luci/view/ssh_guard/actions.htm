@@ -1,0 +1,22 @@
+<%
+	local guard_model = require "luci.model.ssh_guard"
+	local status = guard_model.get_status()
+%>
+
+<div class="cbi-section">
+	<h3><%:Quick Actions%></h3>
+	<div class="cbi-section-descr">
+		<% if status then %>
+			<form method="post" action="<%=luci.dispatcher.build_url('admin', 'services', 'ssh_guard', 'stop')%>" style="display:inline">
+				<input type="submit" class="cbi-button cbi-button-stop" value="<%:Stop Service%>" />
+			</form>
+			<form method="post" action="<%=luci.dispatcher.build_url('admin', 'services', 'ssh_guard', 'restart')%>" style="display:inline">
+				<input type="submit" class="cbi-button cbi-button-reload" value="<%:Restart Service%>" />
+			</form>
+		<% else %>
+			<form method="post" action="<%=luci.dispatcher.build_url('admin', 'services', 'ssh_guard', 'start')%>" style="display:inline">
+				<input type="submit" class="cbi-button cbi-button-apply" value="<%:Start Service%>" />
+			</form>
+		<% end %>
+	</div>
+</div>

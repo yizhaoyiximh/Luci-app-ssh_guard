@@ -1,0 +1,42 @@
+<%+header%>
+<h2><%:SSH 防火墙 - 状态%></h2>
+
+<div class="cbi-section">
+	<h3><%:已封禁IP列表%></h3>
+	<%
+	local guard = require "luci.model.ssh_guard"
+	local banned = guard.get_banned_ips()
+	%>
+
+	<% if #banned > 0 then %>
+	<table class="cbi-section-table">
+		<tr class="cbi-section-table-titles">
+			<th class="cbi-section-table-cell"><%:IP 地址%></th>
+			<th class="cbi-section-table-cell"><%:剩余时间%></th>
+			<th class="cbi-section-table-cell"><%:操作%></th>
+		</tr>
+		<% for i, v in ipairs(banned) do %>
+		<tr class="cbi-section-table-row">
+			<td class="cbi-section-table-cell"><%=v.ip%></td>
+			<td class="cbi-section-table-cell">
+				<% if v.remaining > 60 then %>
+					<%=string.format("%d 分钟", math.floor(v.remaining / 60))%>
+				<% else %>
+					<%=string.format("%d 秒", v.remaining)%>
+				<% end %>
+			</td>
+			<td class="cbi-section-table-cell">
+				<a href="<%=luci.dispatcher.build_url('admin', 'services', 'ssh_guard', 'unban')%>?ip=<%=v.ip%>"><%:临时解封%></a>
+			</td>
+		</tr>
+		<% end %>
+	</table>
+	<% else %>
+	<p><%:暂无封禁IP%></p>
+	<% end %>
+</div>
+
+<div class="cbi-page-actions">
+	<a class="btn" href="<%=luci.dispatcher.build_url('admin', 'services', 'ssh_guard', 'config')%>"><%:返回配置%></a>
+</div>
+<%+footer%>

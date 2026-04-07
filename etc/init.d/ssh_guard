@@ -1,0 +1,20 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+STOP=10
+
+start() {
+	/usr/lib/ssh_guard/ssh_guard.sh start
+}
+
+stop() {
+	/usr/lib/ssh_guard/ssh_guard.sh stop
+}
+
+restart() {
+	/usr/lib/ssh_guard/ssh_guard.sh restart
+}
+
+status() {
+	/usr/lib/ssh_guard/ssh_guard.sh status
+}
