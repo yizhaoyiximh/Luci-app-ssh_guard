@@ -19,10 +19,10 @@ jobs:
       - name: Extract SDK
         run: tar xf openwrt-sdk-*.tar.xz
 
-      - name: Copy package
+      - name: Setup package
         run: |
-          cp Makefile openwrt-sdk-*/package/luci-app-ssh-guard/
           mkdir -p openwrt-sdk-*/package/luci-app-ssh-guard/files
+          cp Makefile openwrt-sdk-*/package/luci-app-ssh-guard/
           cp -r files/* openwrt-sdk-*/package/luci-app-ssh-guard/files/
           cp -r luasrc openwrt-sdk-*/package/luci-app-ssh-guard/
           cp -r root/* openwrt-sdk-*/package/luci-app-ssh-guard/
