@@ -94,7 +94,7 @@ function temp_unban(ip)
 			wf:close()
 		end
 		
-		logger("ssh_guard", "temp unbanned IP: " .. ip)
+		luci.sys.call("logger -t ssh_guard 'temp unbanned IP: " .. ip .. "'")
 		return true
 	else
 		os.remove(temp_file)

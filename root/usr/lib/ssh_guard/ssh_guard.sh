@@ -44,7 +44,10 @@ ban_ip() {
 	local ip="$1"
 	local now=$(date +%s)
 
-	if grep -q "^${ip}:" "$BLACKLIST_FILE" 2>/dev/null; then
+	local existing=$(grep "^${ip}:" "$BLACKLIST_FILE" 2>/dev/null)
+	if [ -n "$existing" ]; then
+		sed -i "s/^${ip}:.*$/${ip}:${now}/" "$BLACKLIST_FILE"
+		logger -t ssh_guard "Reset ban time for IP: $ip"
 		return 0
 	fi
 

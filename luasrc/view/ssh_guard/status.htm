@@ -1,8 +1,8 @@
 <%+header%>
-<h2><%:SSH 防火墙 - 状态%></h2>
 
 <div class="cbi-section">
-	<h3><%:已封禁IP列表%></h3>
+	<h2 style="margin: 0 0 1em 1em"><%:SSH 防火墙 - 状态%></h2>
+	<h3 style="margin: 0"><%:已封禁IP列表%></h3>
 	<%
 	local guard = require "luci.model.ssh_guard"
 	local banned = guard.get_banned_ips()
