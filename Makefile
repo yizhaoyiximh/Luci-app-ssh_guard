@@ -21,7 +21,6 @@ define Package/luci-app-ssh_guard
   SUBMENU:=3. Applications
   TITLE:=SSH Guard - Auto-ban SSH attackers
   PKGARCH:=all
-  DEPENDS:=+iptables +logread
 endef
 
 define Package/luci-app-ssh_guard/description
