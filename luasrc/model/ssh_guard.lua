@@ -41,16 +41,21 @@ function get_banned_ips()
 			local remaining = expiry - now
 			
 			if remaining > 0 then
+				local bt = tonumber(ban_time)
 				table.insert(ips, {
 					ip = ip,
 					remaining = remaining,
-					ban_time = tonumber(ban_time)
+					ban_time = bt,
+					ban_time_str = os.date("%Y-%m-%d %H:%M:%S", bt)
 				})
 			end
 		end
 	end
 	
 	f:close()
+	
+	table.sort(ips, function(a, b) return a.ban_time > b.ban_time end)
+	
 	return ips
 end
 
