@@ -4,17 +4,17 @@ START=99
 STOP=10
 
 start() {
-	/usr/lib/sshfirewall/sshfirewall.sh start
+	/usr/lib/ssh_guard/ssh_guard.sh start
 }
 
 stop() {
-	/usr/lib/sshfirewall/sshfirewall.sh stop
+	/usr/lib/ssh_guard/ssh_guard.sh stop
 }
 
 restart() {
-	/usr/lib/sshfirewall/sshfirewall.sh restart
+	/usr/lib/ssh_guard/ssh_guard.sh restart
 }
 
 status() {
-	/usr/lib/sshfirewall/sshfirewall.sh status
+	/usr/lib/ssh_guard/ssh_guard.sh status
 }
