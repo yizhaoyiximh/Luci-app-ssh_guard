@@ -39,11 +39,11 @@ jobs:
       - name: Setup package
         run: |
           PKG_NAME="luci-app-ssh_guard"
-          mkdir -p "${{ env.SDK_DIR }}package/${PKG_NAME}/files"
+          mkdir -p "${{ env.SDK_DIR }}package/${PKG_NAME}"
           cp Makefile "${{ env.SDK_DIR }}package/${PKG_NAME}/"
-          cp -r files/* "${{ env.SDK_DIR }}package/${PKG_NAME}/files/"
+          cp -r files "${{ env.SDK_DIR }}package/${PKG_NAME}/"
           cp -r luasrc "${{ env.SDK_DIR }}package/${PKG_NAME}/"
-          cp -r root/* "${{ env.SDK_DIR }}package/${PKG_NAME}/"
+          cp -r root "${{ env.SDK_DIR }}package/${PKG_NAME}/"
           ls -la "${{ env.SDK_DIR }}package/${PKG_NAME}/"
 
       - name: Build
