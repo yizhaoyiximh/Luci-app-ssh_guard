@@ -49,6 +49,7 @@ jobs:
       - name: Build
         run: |
           cd "${{ env.SDK_DIR }}"
+          make defconfig
           make package/luci-app-ssh_guard/compile V=sc 2>&1
 
       - name: Find IPK
